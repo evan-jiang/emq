@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd http://xmlns.jcp.org/xml/ns/javaee"
+    version="3.1" metadata-complete="true">
+
+    <!-- <filter> <filter-name>authFilter</filter-name> <filter-class>cn.putao.order.filter.AuthFilter</filter-class> 
+        </filter> <filter-mapping> <filter-name>authFilter</filter-name> <url-pattern>/*</url-pattern> 
+        </filter-mapping> -->
+
+    <servlet>
+        <servlet-name>springDispatcher</servlet-name>
+        <!--<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class> -->
+        <servlet-class>cn.putao.msg.dispatcher.MsgDispatcher</servlet-class>
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>classpath:spring/application-context.xml</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>springDispatcher</servlet-name>
+        <url-pattern>/*</url-pattern>
+    </servlet-mapping>
+
+
+    <!-- <filter> <filter-name>jsonpFilter</filter-name> <filter-class>cn.putao.open.base.web.JSONPFilter</filter-class> 
+        </filter> <filter-mapping> <filter-name>jsonpFilter</filter-name> <url-pattern>/*</url-pattern> 
+        </filter-mapping> <filter> <filter-name>apiFilter</filter-name> <filter-class>cn.putao.open.base.web.OpenApiFilter</filter-class> 
+        </filter> <filter-mapping> <filter-name>apiFilter</filter-name> <url-pattern>/v1/api/*</url-pattern> 
+        </filter-mapping> -->
+
+    <filter>
+        <filter-name>encodingFilter</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF8</param-value>
+        </init-param>
+        <init-param>
+            <param-name>forceEncoding</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>encodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+</web-app>

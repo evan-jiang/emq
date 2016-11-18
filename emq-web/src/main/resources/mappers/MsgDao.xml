@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tdpark.dao.MsgDao">
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.tdpark.domain.MsgEntity" useGeneratedKeys="true">
+        insert into msg (
+            <trim suffixOverrides=",">
+                `title`,
+                `url`,
+                `params`,
+                `thread_no`,
+                `match_value`,
+                `plan_times`,
+                `yet_times`,
+                `interval`,
+                `next_time`,
+            </trim>
+        ) values (
+            <trim suffixOverrides=",">
+                #{title},
+                #{url},
+                #{params},
+                #{thread_no},
+                #{match_value},
+                #{plan_times},
+                #{yet_times},
+                #{interval},
+                #{next_time},
+            </trim>
+        )
+    </insert>
+	<select id="pop" resultType="com.tdpark.domain.MsgEntity">
+		select * from msg where thread_no = #{thread_no} order by next_time limit 1 
+	</select>
+	<update id="again" parameterType="com.tdpark.domain.MsgEntity">
+		update msg set yet_times = #{yet_times},next_time = #{next_time} where id = #{id}
+	</update>
+	<delete id="clean" parameterType="com.tdpark.domain.MsgEntity">
+		delete from msg where id = #{id}
+	</delete>
+</mapper>
