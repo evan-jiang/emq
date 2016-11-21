@@ -9,7 +9,8 @@
 # 支持Http和Hessian协议
 
 ### Http调用方式
-- 请求参数
+- 地址：`http://线下从开发者处获取/emq/make`
+- 请求参数：
 
 |字段|类型|必需|描述|
 | --- | --- | --- | --- |
@@ -23,14 +24,14 @@
 |block|boolean|N|默认为false，是否要保证线程安全|
 |group|String|N|block为true时，通过group保证线程安全，group为空时通过params保证线程安全，params为空时通过url保证线程安全|
 
-- 响应参数
+- 响应参数：
 
 |字段|类型|必需|描述|
 | --- | --- | --- | --- |
 |code|String|Y|返回码|
 |msg|String|Y|异常信息|
 
-- 响应实例
+- 响应实例：
 
 ```json
 {
@@ -86,7 +87,7 @@ OR
 |code|String|Y|返回码|
 |msg|String|Y|异常信息|
 
-- 响应实例
+- 响应实例：
 
 ```json
 {
