@@ -14,7 +14,7 @@ import com.tdpark.service.EmqService;
 import com.tdpark.utils.StringUtils;
 import com.tdpark.vo.Result;
 
-@Service
+@Service("emqService")
 public class EmqServiceImpl implements EmqService{
 
 	@Autowired

@@ -14,25 +14,9 @@
 
 
     <!-- hessian provider -->
-    <bean name="/mail_service"
+    <bean name="/emq_service"
         class="org.springframework.remoting.caucho.HessianServiceExporter">
-        <property name="service" ref="mailService" />
-        <property name="serviceInterface" value="cn.putao.msg.service.MailService" />
-    </bean>
-    <bean name="/sms_service"
-        class="org.springframework.remoting.caucho.HessianServiceExporter">
-        <property name="service" ref="smsService" />
-        <property name="serviceInterface" value="cn.putao.msg.service.SmsService" />
-    </bean>
-	<bean name="/voice_service"
-        class="org.springframework.remoting.caucho.HessianServiceExporter">
-        <property name="service" ref="voiceService" />
-        <property name="serviceInterface" value="cn.putao.msg.service.VoiceService" />
-    </bean>
-    
-    <bean name="/wx_msg_service"
-        class="org.springframework.remoting.caucho.HessianServiceExporter">
-        <property name="service" ref="wxMsgService" />
-        <property name="serviceInterface" value="cn.putao.msg.service.WxMsgService" />
+        <property name="service" ref="emqService" />
+        <property name="serviceInterface" value="com.tdpark.service.EmqService" />
     </bean>
 </beans>
