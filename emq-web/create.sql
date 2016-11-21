@@ -13,3 +13,11 @@ CREATE TABLE `msg` (
   KEY `idx_thread_no` (`thread_no`),
   KEY `idx_next_time` (`next_time`)
 ) ENGINE=INNODB AUTO_INCREMENT=1601 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `white` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `domain` varchar(64) NOT NULL COMMENT '允许域名',
+  `app_id` varchar(64) NOT NULL COMMENT '权限ID',
+  `secret` varchar(64) NOT NULL COMMENT '秘钥',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
