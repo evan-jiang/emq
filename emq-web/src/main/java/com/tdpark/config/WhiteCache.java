@@ -20,6 +20,8 @@ public class WhiteCache {
 	
 	public void reload(){
 		List<White> list = whiteDao.select();
+		WHITE_LIST_BY_HOST.clear();
+		WHITE_LIST_BY_APP.clear();
 		if(list != null){
 			for(White w : list){
 				String host = urlToHost(w.getDomain());
