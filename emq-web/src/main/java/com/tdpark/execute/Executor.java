@@ -3,6 +3,7 @@ package com.tdpark.execute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gson.Gson;
 import com.tdpark.domain.Entity;
 import com.tdpark.domain.EntityBridge;
 import com.tdpark.lock.LockContainer;
@@ -56,6 +57,7 @@ public class Executor implements Runnable {
 	}
 	
 	private boolean todo(Entity entity){
+		LOGGER.info("===>{}",new Gson().toJson(entity));
 		return true;
 	}
 	

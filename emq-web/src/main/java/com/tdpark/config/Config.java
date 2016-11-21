@@ -8,7 +8,6 @@ public class Config {
 	private int nodeTotal;
 	private int threadNum;
 	private Map<Integer, String> nodes;
-	private Map<String, Boolean> domaines;
 	public int getNodeIdx() {
 		return nodeIdx;
 	}
@@ -32,12 +31,6 @@ public class Config {
 	}
 	public void setNodes(Map<Integer, String> nodes) {
 		this.nodes = nodes;
-	}
-	public Map<String, Boolean> getDomaines() {
-		return domaines;
-	}
-	public void setDomaines(Map<String, Boolean> domaines) {
-		this.domaines = domaines;
 	}
 	
 }

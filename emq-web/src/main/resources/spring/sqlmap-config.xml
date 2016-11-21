@@ -22,6 +22,7 @@
     <!-- 指定映射器路径 -->
     <mappers>
         <mapper resource="mappers/MsgDao.xml" />
+        <mapper resource="mappers/WhiteDao.xml" />
     </mappers>
 
 </configuration>

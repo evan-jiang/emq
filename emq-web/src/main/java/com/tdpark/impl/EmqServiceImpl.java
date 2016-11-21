@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.tdpark.config.Config;
+import com.tdpark.config.WhiteCache;
 import com.tdpark.domain.Entity;
 import com.tdpark.domain.EntityBridge;
 import com.tdpark.params.EmqParams;
@@ -20,12 +21,18 @@ public class EmqServiceImpl implements EmqService{
 	private Config emqConfig;
 	@Autowired
 	private EntityBridge entityBridge;
+	@Autowired
+	private WhiteCache whiteCache;
 	@Override
 	public Result make(EmqParams emqParams) {
 		Result result = new Result();
 		result.setCode("FAILED");
 		String url = emqParams.getUrl();
-		if (!emqConfig.getDomaines().containsKey(domain(url))) {
+		if(StringUtils.isBlank(url)){
+			result.setMsg("[url] cant be empty!");
+			return result;
+		}
+		if (!whiteCache.checkUrl(url)) {
 			result.setMsg("[url] Illegal format!");
 			return result;
 		}
@@ -38,7 +45,7 @@ public class EmqServiceImpl implements EmqService{
 		}
 		if(plan_times > 1 && interval < 5000){
 			result
-			.setMsg("[execute_interval] Must be greater than 5000!");
+			.setMsg("[interval] Must be greater than 5000!");
 			return result;
 		}
 		if(plan_times > 1 && StringUtils.isBlank(match_value)){
@@ -86,12 +93,4 @@ public class EmqServiceImpl implements EmqService{
 		return result;
 	}
 
-	private static String domain(String url){
-		String host = url.replace("http://", "").replace("https://", "");
-		int idx = host.indexOf("/");
-		if(idx > 0){
-			return host.substring(0,idx);
-		}
-		return host;
-	}
 }

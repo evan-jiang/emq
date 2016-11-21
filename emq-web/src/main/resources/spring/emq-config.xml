@@ -18,10 +18,5 @@
     			<entry key="1" value="http://127.0.0.1:1080/"/>
     		</map>
     	</property> -->
-    	<property name="domaines"><!-- 允许消费消息的域名 -->
-    		<map>
-    			<entry key="http://127.0.0.1:1080/" value="true"/>
-    		</map>
-    	</property>
     </bean>
 </beans>
