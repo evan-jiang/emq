@@ -19,7 +19,7 @@
 |params|String|N|消息被消费时需要携带的参数(参数自行解析)|
 |plan_times|int|N|默认为1，消息在执行失败的情况下最多允许重复执行的次数|
 |interval|long|N|plan_times大于1时必需传且必需大于5000(毫秒)，消息在执行失败的情况下重复执行的时间间隔|
-|match_value|String|N|plan_times大于1时必需传，消息被执行时返回值包含match_value则表示执行成功|
+|match_value|String|Y|消息被执行时返回值包含match_value则表示执行成功|
 |delay|long|N|默认为0(毫秒)，指定执行消息的时间|
 |block|boolean|N|默认为false，是否要保证线程安全|
 |group|String|N|block为true时，通过group保证线程安全，group为空时通过params保证线程安全，params为空时通过url保证线程安全|
@@ -75,7 +75,7 @@ OR
 |params|String|N|消息被消费时需要携带的参数(参数自行解析)|
 |plan_times|int|N|默认为1，消息在执行失败的情况下最多允许重复执行的次数|
 |interval|long|N|plan_times大于1时必需传且必需大于5000(毫秒)，消息在执行失败的情况下重复执行的时间间隔|
-|match_value|String|N|plan_times大于1时必需传，消息被执行时返回值包含match_value则表示执行成功|
+|match_value|String|Y|消息被执行时返回值包含match_value则表示执行成功|
 |delay|long|N|默认为0(毫秒)，指定执行消息的时间|
 |block|boolean|N|默认为false，是否要保证线程安全|
 |group|String|N|block为true时，通过group保证线程安全，group为空时通过params保证线程安全，params为空时通过url保证线程安全|
