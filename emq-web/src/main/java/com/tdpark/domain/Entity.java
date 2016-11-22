@@ -101,9 +101,9 @@ public class Entity {
         this.next_time = next_time;
     }
     public boolean reset(){
+    	this.yet_times += 1;
+    	this.next_time = System.currentTimeMillis() + this.interval;
 		if(this.plan_times > this.yet_times){
-			this.yet_times += 1;
-			this.next_time = System.currentTimeMillis() + this.interval;
 			return true;
 		}
 		return false;

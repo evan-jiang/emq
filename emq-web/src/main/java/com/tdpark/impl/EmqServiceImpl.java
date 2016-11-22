@@ -48,7 +48,7 @@ public class EmqServiceImpl implements EmqService{
 			.setMsg("[interval] Must be greater than 5000!");
 			return result;
 		}
-		if(plan_times > 1 && StringUtils.isBlank(match_value)){
+		if(StringUtils.isBlank(match_value)){
 			result
 			.setMsg("[match_value] cant be empty!");
 			return result;
