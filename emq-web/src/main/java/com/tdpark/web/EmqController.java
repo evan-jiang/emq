@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tdpark.config.WhiteCache;
+import com.tdpark.hold.Hold;
 import com.tdpark.params.EmqParams;
 import com.tdpark.service.EmqService;
 import com.tdpark.vo.Result;
@@ -31,6 +32,18 @@ public class EmqController {
 	@ResponseBody
 	public Object reload(HttpServletRequest request){
 		whiteCache.reload();
+		return new Result();
+	}
+	@RequestMapping("wait")
+	@ResponseBody
+	public Object wait(HttpServletRequest request){
+		Hold.WAITING.set(true);
+		return new Result();
+	}
+	@RequestMapping("resume")
+	@ResponseBody
+	public Object resume(HttpServletRequest request){
+		Hold.WAITING.set(false);
 		return new Result();
 	}
 }
