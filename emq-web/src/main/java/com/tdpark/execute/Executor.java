@@ -19,10 +19,10 @@ import com.tdpark.utils.StringUtils;
 public class Executor implements Runnable {
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(Executor.class);
-	private EntityBridge entityFactory;
+	private EntityBridge entityBridge;
 	private SimpleLock simpleLock;
-	public Executor(int threadNo,EntityBridge entityFactory) {
-		this.entityFactory = entityFactory;
+	public Executor(int threadNo,EntityBridge entityBridge) {
+		this.entityBridge = entityBridge;
 		simpleLock = LockContainer.instance(threadNo);
 	}
 
@@ -34,7 +34,7 @@ public class Executor implements Runnable {
 	
 	private void process(){
 		try {
-			Entity entity = entityFactory.pop(simpleLock);//获取消息实体，并且重置锁的执行时间
+			Entity entity = entityBridge.pop(simpleLock);//获取消息实体，并且重置锁的执行时间
 			if(entity == null){//没有可执行的消息或者线程需要等待时则wait
 				synchronized (simpleLock) {
 					simpleLock.wait();
@@ -52,7 +52,7 @@ public class Executor implements Runnable {
 			}
 			
 			if(todo(entity)){
-				entityFactory.clean(entity);
+				entityBridge.clean(entity);
 				return;
 			}
 			again(entity);
@@ -82,9 +82,9 @@ public class Executor implements Runnable {
 	
 	private void again(Entity entity){
 		if(entity.reset()){
-			entityFactory.again(entity);
+			entityBridge.again(entity);
 		}else{
-			entityFactory.clean(entity);
+			entityBridge.clean(entity);
 		}
 	}
 }
