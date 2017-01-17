@@ -1,11 +1,11 @@
-package com.tdpark.domain;
+package com.tdpark.common.domain;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.tdpark.dao.MsgDao;
-import com.tdpark.lock.LockContainer;
-import com.tdpark.lock.SimpleLock;
+import com.tdpark.run.lock.LockContainer;
+import com.tdpark.run.lock.SimpleLock;
 
 @Component
 public class EntityBridge {

@@ -1,4 +1,4 @@
-package com.tdpark.dispatcher;
+package com.tdpark.web.dispatcher;
 
 import org.springframework.web.servlet.DispatcherServlet;
 

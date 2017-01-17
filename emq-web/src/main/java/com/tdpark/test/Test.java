@@ -4,9 +4,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.google.gson.Gson;
-import com.tdpark.domain.Entity;
-import com.tdpark.domain.EntityBridge;
-import com.tdpark.lock.SimpleLock;
+import com.tdpark.common.domain.Entity;
+import com.tdpark.common.domain.EntityBridge;
+import com.tdpark.run.lock.SimpleLock;
 
 public class Test {
 

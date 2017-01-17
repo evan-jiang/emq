@@ -1,4 +1,4 @@
-package com.tdpark.execute;
+package com.tdpark.run.execute;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -7,12 +7,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
-import com.tdpark.domain.Entity;
-import com.tdpark.domain.EntityBridge;
-import com.tdpark.lock.LockContainer;
-import com.tdpark.lock.SimpleLock;
-import com.tdpark.utils.HttpClient;
-import com.tdpark.utils.StringUtils;
+import com.tdpark.common.domain.Entity;
+import com.tdpark.common.domain.EntityBridge;
+import com.tdpark.eutils.HttpUtils;
+import com.tdpark.eutils.StringUtils;
+import com.tdpark.run.lock.LockContainer;
+import com.tdpark.run.lock.SimpleLock;
 
 
 
@@ -62,13 +62,13 @@ public class Executor implements Runnable {
 	}
 	
 	private boolean todo(Entity entity){
-		Map<String, String> map = new HashMap<String, String>();
+		Map<String, Object> map = new HashMap<String, Object>();
 		if(StringUtils.isNotBlank(entity.getParams())){
 			map.put("params", entity.getParams());
 		}
 		String s = null;
 		try {
-			s = new HttpClient().post(entity.getUrl(), map , String.class);
+			s = HttpUtils.doPost(entity.getUrl(), map);
 			if(s.contains(entity.getMatch_value())){
 				return true;
 			}else{

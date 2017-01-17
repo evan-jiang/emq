@@ -13,7 +13,7 @@
         <!-- 多个拦截器,顺序执行 -->
         <mvc:interceptor>
             <mvc:mapping path="/**" />
-            <bean class="com.tdpark.interceptor.Interceptor"></bean>
+            <bean class="com.tdpark.web.interceptor.Interceptor"></bean>
         </mvc:interceptor>
 
     </mvc:interceptors>

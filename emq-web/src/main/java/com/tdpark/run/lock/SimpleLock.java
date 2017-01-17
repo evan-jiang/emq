@@ -1,8 +1,8 @@
-package com.tdpark.lock;
+package com.tdpark.run.lock;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import com.tdpark.hold.Hold;
+import com.tdpark.common.config.Hold;
 
 public class SimpleLock {
 

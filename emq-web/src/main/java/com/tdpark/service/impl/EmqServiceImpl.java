@@ -1,17 +1,17 @@
-package com.tdpark.impl;
+package com.tdpark.service.impl;
 
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.tdpark.config.Config;
-import com.tdpark.config.WhiteCache;
-import com.tdpark.domain.Entity;
-import com.tdpark.domain.EntityBridge;
+import com.tdpark.common.config.Config;
+import com.tdpark.common.config.WhiteCache;
+import com.tdpark.common.domain.Entity;
+import com.tdpark.common.domain.EntityBridge;
+import com.tdpark.eutils.StringUtils;
 import com.tdpark.params.EmqParams;
 import com.tdpark.service.EmqService;
-import com.tdpark.utils.StringUtils;
 import com.tdpark.vo.Result;
 
 @Service("emqService")
@@ -32,7 +32,7 @@ public class EmqServiceImpl implements EmqService{
 			result.setMsg("[url] cant be empty!");
 			return result;
 		}
-		if (!whiteCache.checkUrl(url)) {
+		if (emqConfig.isRestrictHost() && !whiteCache.checkUrl(url)) {
 			result.setMsg("[url] Illegal format!");
 			return result;
 		}

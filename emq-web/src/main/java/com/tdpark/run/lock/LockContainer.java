@@ -1,7 +1,8 @@
-package com.tdpark.lock;
+package com.tdpark.run.lock;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 public class LockContainer {
 
@@ -28,5 +29,12 @@ public class LockContainer {
 		}
 	}
 	
-	
+	public static void notifyALL(){
+		for(Entry<Integer, SimpleLock> e : LOCKES.entrySet()){
+			SimpleLock simpleLock = e.getValue();
+			synchronized (simpleLock) {
+				simpleLock.notify();
+			}
+		}
+	}
 }

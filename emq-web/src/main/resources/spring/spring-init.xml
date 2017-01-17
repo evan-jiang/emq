@@ -11,6 +11,6 @@
 
     <!-- 发货 -->
     <!-- <bean id="printJob" class="cn.putao.process.job.PrintJob" /> -->
-    <bean id="emqInit" class="com.tdpark.init.EmqInit" />
+    <bean id="emqInit" class="com.tdpark.run.init.EmqInit" />
     
 </beans>

@@ -1,7 +1,7 @@
 package com.tdpark.dao;
 import org.apache.ibatis.annotations.Param;
 
-import com.tdpark.domain.Entity;
+import com.tdpark.common.domain.Entity;
 public interface MsgDao {
    
     public Long insert(Entity msgEntity);

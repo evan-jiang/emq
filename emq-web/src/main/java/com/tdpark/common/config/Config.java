@@ -1,4 +1,4 @@
-package com.tdpark.config;
+package com.tdpark.common.config;
 
 import java.util.Map;
 
@@ -8,6 +8,8 @@ public class Config {
 	private int nodeTotal;
 	private int threadNum;
 	private Map<Integer, String> nodes;
+	private boolean restrictHost = Boolean.FALSE;
+	
 	public int getNodeIdx() {
 		return nodeIdx;
 	}
@@ -31,6 +33,12 @@ public class Config {
 	}
 	public void setNodes(Map<Integer, String> nodes) {
 		this.nodes = nodes;
+	}
+	public boolean isRestrictHost() {
+		return restrictHost;
+	}
+	public void setRestrictHost(boolean restrictHost) {
+		this.restrictHost = restrictHost;
 	}
 	
 }

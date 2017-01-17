@@ -1,4 +1,4 @@
-package com.tdpark.domain;
+package com.tdpark.common.domain;
 public class Entity {
     /*** 主键 ***/
     private long id;

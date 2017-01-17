@@ -1,12 +1,12 @@
-package com.tdpark.init;
+package com.tdpark.run.init;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.tdpark.config.Config;
-import com.tdpark.config.WhiteCache;
-import com.tdpark.domain.EntityBridge;
-import com.tdpark.execute.Executor;
+import com.tdpark.common.config.Config;
+import com.tdpark.common.config.WhiteCache;
+import com.tdpark.common.domain.EntityBridge;
+import com.tdpark.run.execute.Executor;
 
 public class EmqInit implements InitializingBean{
 

@@ -9,10 +9,11 @@
 	
 
 
-    <bean id="config" class="com.tdpark.config.Config">
+    <bean id="config" class="com.tdpark.common.config.Config">
     	<property name="nodeIdx"  value="1"/><!-- 当前节点编号  -->
     	<property name="nodeTotal" value="1"/><!-- 总节点数 -->
     	<property name="threadNum"  value="64"/><!-- 每个节点的线程数 -->
+    	<property name="restrictHost"  value="false"/><!-- 是否限制域名 -->
     	<!-- <property name="nodes">所有节点的访问根路径
     		<map>
     			<entry key="1" value="http://127.0.0.1:1080/"/>

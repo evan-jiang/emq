@@ -1,4 +1,4 @@
-package com.tdpark.interceptor;
+package com.tdpark.web.interceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

@@ -1,4 +1,4 @@
-package com.tdpark.config;
+package com.tdpark.common.config;
 
 import java.util.HashMap;
 import java.util.List;
@@ -7,8 +7,8 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.tdpark.common.domain.White;
 import com.tdpark.dao.WhiteDao;
-import com.tdpark.domain.White;
 
 @Component
 public class WhiteCache {
