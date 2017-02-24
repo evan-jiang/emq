@@ -13,7 +13,7 @@ public class Test {
 	public static void main(String[] args) {
 		ApplicationContext ac = new ClassPathXmlApplicationContext("classpath:spring/application-context.xml");
 		EntityBridge factory = ac.getBean(EntityBridge.class);
-		Entity entity = factory.pop(new SimpleLock(1));
+		Entity entity = factory._pop(new SimpleLock(1));
 		System.out.println(new Gson().toJson(entity));
 	}
 }

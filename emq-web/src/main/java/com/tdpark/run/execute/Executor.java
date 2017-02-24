@@ -34,7 +34,7 @@ public class Executor implements Runnable {
 	
 	private void process(){
 		try {
-			Entity entity = entityBridge.pop(simpleLock);//获取消息实体，并且重置锁的执行时间
+			Entity entity = entityBridge._pop(simpleLock);//获取消息实体，并且重置锁的执行时间
 			if(entity == null){//没有可执行的消息或者线程需要等待时则wait
 				synchronized (simpleLock) {
 					simpleLock.wait();
@@ -52,7 +52,7 @@ public class Executor implements Runnable {
 			}
 			
 			if(todo(entity)){
-				entityBridge.clean(entity);
+				entityBridge._clean(entity);
 				return;
 			}
 			again(entity);
@@ -82,9 +82,9 @@ public class Executor implements Runnable {
 	
 	private void again(Entity entity){
 		if(entity.reset()){
-			entityBridge.again(entity);
+			entityBridge._again(entity);
 		}else{
-			entityBridge.clean(entity);
+			entityBridge._clean(entity);
 		}
 	}
 }

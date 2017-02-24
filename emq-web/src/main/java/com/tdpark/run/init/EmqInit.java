@@ -11,7 +11,7 @@ import com.tdpark.run.execute.Executor;
 public class EmqInit implements InitializingBean{
 
 	@Autowired
-	private EntityBridge entityFactory;
+	private EntityBridge entityBridge;
 	@Autowired
 	private Config config;
 	@Autowired
@@ -20,7 +20,7 @@ public class EmqInit implements InitializingBean{
 	public void afterPropertiesSet() throws Exception {
 		whiteCache.reload();
 		for(int idx=0;idx<config.getThreadNum();idx++){
-			new Thread(new Executor(idx, entityFactory)).start();
+			new Thread(new Executor(idx, entityBridge)).start();
 		}
 	}
 

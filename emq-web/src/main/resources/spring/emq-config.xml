@@ -6,18 +6,42 @@
         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
 
-	
-
 
     <bean id="config" class="com.tdpark.common.config.Config">
-    	<property name="nodeIdx"  value="1"/><!-- 当前节点编号  -->
-    	<property name="nodeTotal" value="1"/><!-- 总节点数 -->
-    	<property name="threadNum"  value="64"/><!-- 每个节点的线程数 -->
-    	<property name="restrictHost"  value="false"/><!-- 是否限制域名 -->
-    	<!-- <property name="nodes">所有节点的访问根路径
-    		<map>
-    			<entry key="1" value="http://127.0.0.1:1080/"/>
-    		</map>
-    	</property> -->
+        <property name="nodeIdx"  value="1"/><!-- 当前节点编号  -->
+        <property name="nodeTotal" value="1"/><!-- 总节点数 -->
+        <property name="threadNum"  value="64"/><!-- 每个节点的线程数 -->
+        <property name="restrictHost"  value="false"/><!-- 是否限制域名 -->
+        <!-- <property name="nodes">所有节点的访问根路径
+            <map>
+                <entry key="1" value="http://127.0.0.1:1080/"/>
+            </map>
+        </property> -->
+    </bean>
+    
+    <!-- redis config -->
+    <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+        <property name="maxTotal" value="1023" />
+        <property name="maxIdle" value="200" />
+        <property name="maxWaitMillis" value="1000" />
+        <property name="testOnBorrow" value="false" />
+    </bean>
+    <bean id="shardedJedisPool" class="redis.clients.jedis.ShardedJedisPool">
+        <constructor-arg index="0" ref="jedisPoolConfig" />
+        <constructor-arg index="1">
+            <list>
+                <bean class="redis.clients.jedis.JedisShardInfo">
+                    <constructor-arg index="0" value="127.0.0.1" />
+                    <constructor-arg index="1" value="6378" type="int" />
+                    <property name="password" value="putao201412" />
+                </bean>
+                <bean class="redis.clients.jedis.JedisShardInfo">
+                    <constructor-arg index="0" value="127.0.0.1" />
+                    <constructor-arg index="1" value="6379" type="int" />
+                    <property name="password" value="putao201412" />
+                </bean>
+            </list>
+            
+        </constructor-arg>
     </bean>
 </beans>

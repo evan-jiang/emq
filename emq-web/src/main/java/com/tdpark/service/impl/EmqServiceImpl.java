@@ -88,7 +88,7 @@ public class EmqServiceImpl implements EmqService{
 		entity.setThread_no(thread_no);
 		entity.setTitle(title);
 		entity.setUrl(url);
-		entityBridge.push(entity);
+		entityBridge._push(entity);
 		result.setCode(Result.SUCCESS_CODE);
 		return result;
 	}

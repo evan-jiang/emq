@@ -25,7 +25,7 @@
     <context:component-scan base-package="com.tdpark"></context:component-scan>
     <aop:aspectj-autoproxy proxy-target-class="true" />
 
-    <import resource="classpath:spring/spring-dao.xml" />
+    <!-- <import resource="classpath:spring/spring-dao.xml" /> -->
     <import resource="classpath:spring/spring-mvc.xml" />
     <import resource="classpath:spring/spring-init.xml" />
     <import resource="classpath:spring/emq-config.xml" />
