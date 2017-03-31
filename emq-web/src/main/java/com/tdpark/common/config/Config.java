@@ -4,9 +4,10 @@ import java.util.Map;
 
 public class Config {
 	
+    /** 每个节点的默认线程数  **/
+    public static final int DEF_THREAD_NUM = 8;
 	private int nodeIdx;
-	private int nodeTotal;
-	private int threadNum;
+	private int threadNum = DEF_THREAD_NUM;
 	private Map<Integer, String> nodes;
 	private boolean restrictHost = Boolean.FALSE;
 	
@@ -17,10 +18,7 @@ public class Config {
 		this.nodeIdx = nodeIdx;
 	}
 	public int getNodeTotal() {
-		return nodeTotal;
-	}
-	public void setNodeTotal(int nodeTotal) {
-		this.nodeTotal = nodeTotal;
+		return nodes.size();
 	}
 	public int getThreadNum() {
 		return threadNum;

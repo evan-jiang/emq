@@ -5,6 +5,7 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class Result implements Serializable{
 	public static final String SUCCESS_CODE = "SUCCESS";
+	public static final String FAILED_CODE = "FAILED";
 	private String code = SUCCESS_CODE;
 	private String msg;
 	public String getCode() {

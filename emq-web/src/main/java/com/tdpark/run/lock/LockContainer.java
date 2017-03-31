@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.tdpark.common.cache.StatusCache;
+
 public class LockContainer {
 
 	private static final Map<Integer, SimpleLock> LOCKES = new HashMap<Integer, SimpleLock>();
@@ -21,7 +23,7 @@ public class LockContainer {
 	public static void notify(int threadNo,long newExecuteTime){
 		if(LOCKES.containsKey(threadNo)){
 			SimpleLock simpleLock = LOCKES.get(threadNo);
-			if(simpleLock.getExecuteTime() > newExecuteTime && !simpleLock.getWaiting().get()){
+			if(simpleLock.getExecuteTime() > newExecuteTime && !StatusCache.pausing()){
 				synchronized(simpleLock){
 					simpleLock.notify();
 				}

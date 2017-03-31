@@ -8,15 +8,14 @@
 
 
     <bean id="config" class="com.tdpark.common.config.Config">
-        <property name="nodeIdx"  value="1"/><!-- 当前节点编号  -->
-        <property name="nodeTotal" value="1"/><!-- 总节点数 -->
-        <property name="threadNum"  value="64"/><!-- 每个节点的线程数 -->
-        <property name="restrictHost"  value="false"/><!-- 是否限制域名 -->
-        <!-- <property name="nodes">所有节点的访问根路径
+        <property name="nodeIdx"  value="1"/><!-- 必选：当前节点编号，每个节点的配置必须不同  -->
+        <property name="threadNum"  value="64"/><!-- 可选[默认8]：每个节点的线程数，必须保证每个节点的该配置相同 -->
+        <property name="nodes"><!-- 必选：所有节点的访问根路径  -->
             <map>
-                <entry key="1" value="http://127.0.0.1:1080/"/>
+                <entry key="1" value="http://127.0.0.1:2080/emq-web/"/>
+                <entry key="2" value="http://127.0.0.1:3080/emq-web/"/>
             </map>
-        </property> -->
+        </property>
     </bean>
     
     <!-- redis config -->
@@ -30,11 +29,11 @@
         <constructor-arg index="0" ref="jedisPoolConfig" />
         <constructor-arg index="1">
             <list>
-                <bean class="redis.clients.jedis.JedisShardInfo">
+                <!-- <bean class="redis.clients.jedis.JedisShardInfo">
                     <constructor-arg index="0" value="127.0.0.1" />
                     <constructor-arg index="1" value="6378" type="int" />
                     <property name="password" value="putao201412" />
-                </bean>
+                </bean> -->
                 <bean class="redis.clients.jedis.JedisShardInfo">
                     <constructor-arg index="0" value="127.0.0.1" />
                     <constructor-arg index="1" value="6379" type="int" />

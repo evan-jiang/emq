@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.tdpark.common.cache.WhiteCache;
+import com.tdpark.common.channel.BrotherChannel;
 import com.tdpark.common.config.Config;
 import com.tdpark.common.dal.EntityDAL;
 import com.tdpark.common.domain.Entity;
@@ -23,10 +24,12 @@ public class EmqServiceImpl implements EmqService{
 	private EntityDAL entityDAL;
 	@Autowired
 	private WhiteCache whiteCache;
+	@Autowired
+	private BrotherChannel brotherChannel;
 	@Override
 	public Result make(EmqParams emqParams) {
 		Result result = new Result();
-		result.setCode("FAILED");
+		result.setCode(Result.FAILED_CODE);
 		String url = emqParams.getUrl();
 		if(StringUtils.isBlank(url)){
 			result.setMsg("[url] cant be empty!");
@@ -89,6 +92,7 @@ public class EmqServiceImpl implements EmqService{
 		entity.setTitle(title);
 		entity.setUrl(url);
 		entityDAL._push(entity);
+		brotherChannel.notifyThread(thread_no, entity.getNext_time());
 		result.setCode(Result.SUCCESS_CODE);
 		return result;
 	}

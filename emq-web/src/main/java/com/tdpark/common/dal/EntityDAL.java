@@ -10,9 +10,9 @@ import redis.clients.jedis.ShardedJedisPool;
 import redis.clients.jedis.Tuple;
 
 import com.google.gson.Gson;
+import com.tdpark.common.cache.StatusCache;
 import com.tdpark.common.domain.Entity;
 import com.tdpark.eutils.StringUtils;
-import com.tdpark.run.lock.LockContainer;
 import com.tdpark.run.lock.SimpleLock;
 @Component
 public class EntityDAL {
@@ -33,7 +33,7 @@ public class EntityDAL {
         return shardedJedis.incr(MQ_SEQUENCE_KEY);
     }
     /**
-     * 消息首次被保存
+     * 消息首次被保存，伴随着通知节点唤醒线程
      * @param entity
      */
     public void _push(Entity entity){
@@ -48,7 +48,7 @@ public class EntityDAL {
         } finally {
             shardedJedisPool.returnResource(shardedJedis);
         }
-        LockContainer.notify(entity.getThread_no(), entity.getNext_time());
+        //LockContainer.notify(entity.getThread_no(), entity.getNext_time());
     }
     /**
      * 获取消息
@@ -57,7 +57,7 @@ public class EntityDAL {
      */
     public Entity _pop(SimpleLock simpleLock){
         Entity entity = null;
-        if (!simpleLock.getWaiting().get()) {
+        if (!StatusCache.pausing()) {
             ShardedJedis shardedJedis = shardedJedisPool.getResource();
             try {
                 String threadKey = String.format(MQ_THREAD_NO_KEY, simpleLock.getThreadNo());
