@@ -7,8 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
+import com.tdpark.common.dal.EntityDAL;
 import com.tdpark.common.domain.Entity;
-import com.tdpark.common.domain.EntityBridge;
 import com.tdpark.eutils.HttpUtils;
 import com.tdpark.eutils.StringUtils;
 import com.tdpark.run.lock.LockContainer;
@@ -19,10 +19,10 @@ import com.tdpark.run.lock.SimpleLock;
 public class Executor implements Runnable {
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(Executor.class);
-	private EntityBridge entityBridge;
+	private EntityDAL entityDAL;
 	private SimpleLock simpleLock;
-	public Executor(int threadNo,EntityBridge entityBridge) {
-		this.entityBridge = entityBridge;
+	public Executor(int threadNo,EntityDAL entityDAL) {
+		this.entityDAL = entityDAL;
 		simpleLock = LockContainer.instance(threadNo);
 	}
 
@@ -34,7 +34,7 @@ public class Executor implements Runnable {
 	
 	private void process(){
 		try {
-			Entity entity = entityBridge._pop(simpleLock);//获取消息实体，并且重置锁的执行时间
+			Entity entity = entityDAL._pop(simpleLock);//获取消息实体，并且重置锁的执行时间
 			if(entity == null){//没有可执行的消息或者线程需要等待时则wait
 				synchronized (simpleLock) {
 					simpleLock.wait();
@@ -52,7 +52,7 @@ public class Executor implements Runnable {
 			}
 			
 			if(todo(entity)){
-				entityBridge._clean(entity);
+				entityDAL._clean(entity);
 				return;
 			}
 			again(entity);
@@ -82,9 +82,9 @@ public class Executor implements Runnable {
 	
 	private void again(Entity entity){
 		if(entity.reset()){
-			entityBridge._again(entity);
+			entityDAL._again(entity);
 		}else{
-			entityBridge._clean(entity);
+			entityDAL._clean(entity);
 		}
 	}
 }

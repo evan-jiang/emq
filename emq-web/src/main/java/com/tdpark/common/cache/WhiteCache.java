@@ -1,4 +1,4 @@
-package com.tdpark.common.config;
+package com.tdpark.common.cache;
 
 import java.util.HashMap;
 import java.util.Map;

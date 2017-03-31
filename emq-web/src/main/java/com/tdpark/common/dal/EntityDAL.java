@@ -1,4 +1,4 @@
-package com.tdpark.common.domain;
+package com.tdpark.common.dal;
 
 import java.util.Set;
 
@@ -10,15 +10,12 @@ import redis.clients.jedis.ShardedJedisPool;
 import redis.clients.jedis.Tuple;
 
 import com.google.gson.Gson;
+import com.tdpark.common.domain.Entity;
 import com.tdpark.eutils.StringUtils;
 import com.tdpark.run.lock.LockContainer;
 import com.tdpark.run.lock.SimpleLock;
-
 @Component
-public class EntityBridge {
-
-    /*@Autowired
-    private MsgDao msgDao;*/
+public class EntityDAL {
     
     @Autowired
     private ShardedJedisPool shardedJedisPool;
@@ -27,10 +24,18 @@ public class EntityBridge {
     private static final String MQ_ID_KEY = "MQ_ID_%s";
     private static final String MQ_SEQUENCE_KEY = "MQ_SEQUENCE";
     
+    /**
+     * 获取自增ID
+     * @param shardedJedis
+     * @return
+     */
     private long sequence(ShardedJedis shardedJedis){
         return shardedJedis.incr(MQ_SEQUENCE_KEY);
     }
-    
+    /**
+     * 消息首次被保存
+     * @param entity
+     */
     public void _push(Entity entity){
         ShardedJedis shardedJedis = shardedJedisPool.getResource();
         try {
@@ -45,7 +50,11 @@ public class EntityBridge {
         }
         LockContainer.notify(entity.getThread_no(), entity.getNext_time());
     }
-    
+    /**
+     * 获取消息
+     * @param simpleLock
+     * @return
+     */
     public Entity _pop(SimpleLock simpleLock){
         Entity entity = null;
         if (!simpleLock.getWaiting().get()) {
@@ -67,7 +76,10 @@ public class EntityBridge {
         simpleLock.setExecuteTime(entity == null ? Long.MAX_VALUE : entity.getNext_time());
         return entity;
     }
-
+    /**
+     * 消息再次被保存
+     * @param entity
+     */
     public void _again(Entity entity) {
         ShardedJedis shardedJedis = shardedJedisPool.getResource();
         try {
@@ -79,7 +91,10 @@ public class EntityBridge {
             shardedJedisPool.returnResource(shardedJedis);
         }
     }
-    
+    /**
+     * 清除消息
+     * @param entity
+     */
     public void _clean(Entity entity) {
         ShardedJedis shardedJedis = shardedJedisPool.getResource();
         try {
@@ -91,27 +106,4 @@ public class EntityBridge {
             shardedJedisPool.returnResource(shardedJedis);
         }
     }
-    
-    /*public void push(Entity entity) {
-        msgDao.insert(entity);
-        LockContainer.notify(entity.getThread_no(), entity.getNext_time());
-    }
-
-    public Entity pop(SimpleLock simpleLock) {
-        Entity entity = null;
-        if (!simpleLock.getWaiting().get()) {
-            entity = msgDao.pop(simpleLock.getThreadNo());
-        }
-        simpleLock.setExecuteTime(entity == null ? Long.MAX_VALUE : entity
-                .getNext_time());
-        return entity;
-    }
-
-    public void again(Entity entity) {
-        msgDao.again(entity);
-    }
-
-    public void clean(Entity entity) {
-        msgDao.clean(entity);
-    }*/
 }

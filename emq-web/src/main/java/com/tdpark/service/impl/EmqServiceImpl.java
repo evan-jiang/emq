@@ -5,10 +5,10 @@ import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.tdpark.common.cache.WhiteCache;
 import com.tdpark.common.config.Config;
-import com.tdpark.common.config.WhiteCache;
+import com.tdpark.common.dal.EntityDAL;
 import com.tdpark.common.domain.Entity;
-import com.tdpark.common.domain.EntityBridge;
 import com.tdpark.eutils.StringUtils;
 import com.tdpark.params.EmqParams;
 import com.tdpark.service.EmqService;
@@ -20,7 +20,7 @@ public class EmqServiceImpl implements EmqService{
 	@Autowired
 	private Config emqConfig;
 	@Autowired
-	private EntityBridge entityBridge;
+	private EntityDAL entityDAL;
 	@Autowired
 	private WhiteCache whiteCache;
 	@Override
@@ -88,7 +88,7 @@ public class EmqServiceImpl implements EmqService{
 		entity.setThread_no(thread_no);
 		entity.setTitle(title);
 		entity.setUrl(url);
-		entityBridge._push(entity);
+		entityDAL._push(entity);
 		result.setCode(Result.SUCCESS_CODE);
 		return result;
 	}
