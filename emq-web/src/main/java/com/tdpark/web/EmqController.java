@@ -29,7 +29,7 @@ import com.tdpark.service.EmqService;
 import com.tdpark.vo.Result;
 
 @Controller
-@RequestMapping("/emq")
+@RequestMapping("emq")
 public class EmqController {
 
     @Autowired
@@ -198,14 +198,20 @@ public class EmqController {
     @ResponseBody
     @Description("帮助")
     public Object help(HttpServletRequest request){
-        ConfigResult result = new ConfigResult();
-        List<Object> data = new ArrayList<Object>();
         Class<?> clazz = EmqController.class;
-        String baseUri = "";
+        String fristName = "";
         RequestMapping mapping = clazz.getAnnotation(RequestMapping.class);
         if(mapping != null){
-            baseUri = mapping.value()[0];
+            fristName = mapping.value()[0];
         }
+        String requestUrl = request.getRequestURL().toString();
+        int hidx = requestUrl.indexOf("/help",requestUrl.indexOf(fristName));
+        String baseUrl = requestUrl.substring(0,hidx);
+        
+        ConfigResult result = new ConfigResult();
+        List<Object> data = new ArrayList<Object>();
+        
+        
         Method[] methods = clazz.getDeclaredMethods();
         for(Method m : methods){
             Description description = m.getAnnotation(Description.class);
@@ -214,7 +220,7 @@ public class EmqController {
                 continue;
             }
             Map<String, Object> map = new HashMap<String, Object>();
-            String url = config.getNodes().get(config.getNodeIdx()) + baseUri + "/" + requestMapping.value()[0];
+            String url = baseUrl + requestMapping.value()[0];
             map.put("url", url);
             map.put("description", description.value());
             data.add(map);
@@ -223,20 +229,13 @@ public class EmqController {
         return result;
     }
     public static void main(String[] args) {
-        Class<?> clazz = EmqController.class;
-        String baseUri = "";
-        RequestMapping mapping = clazz.getAnnotation(RequestMapping.class);
-        if(mapping != null){
-            baseUri = mapping.value()[0];
-        }
-        Method[] methods = clazz.getDeclaredMethods();
-        for(Method m : methods){
-            Description description = m.getAnnotation(Description.class);
-            RequestMapping requestMapping = m.getAnnotation(RequestMapping.class);
-            if(description == null || requestMapping == null){
-                continue;
-            }
-            System.out.println(baseUri + "/" + requestMapping.value()[0] + " : " + description.value());
-        }
+        String requestUrl = "http://127.0.0.1:2080/emq//help";
+        String requestURI = "/emq//help";
+        String base = requestUrl.substring(0,requestUrl.length() - requestURI.length());
+        String projectName = requestURI.replace("//", "/").replace("emq/help", "").replace("//", "/");
+        System.out.println(requestUrl);
+        System.out.println(requestURI);
+        System.out.println(base);
+        System.out.println(projectName);
     }
 }
