@@ -10,10 +10,10 @@
     <bean id="config" class="com.tdpark.common.config.Config">
         <property name="nodeIdx"  value="1"/><!-- 必选：当前节点编号，每个节点的配置必须不同  -->
         <property name="threadNum"  value="16"/><!-- 可选[默认8]：每个节点的线程数，必须保证每个节点的该配置相同 -->
-        <property name="nodes"><!-- 必选：所有节点的访问根路径  -->
+        <property name="nodes"><!-- 必选：所有节点的访问根路径【根路径不能有向木明】  -->
             <map>
-                <entry key="1" value="http://127.0.0.1:2080/emq-web/"/>
-                <!-- <entry key="2" value="http://127.0.0.1:3080/emq-web/"/> -->
+                <entry key="1" value="http://127.0.0.1:2080/"/>
+                <!-- <entry key="2" value="http://127.0.0.1:3080/"/> -->
             </map>
         </property>
     </bean>

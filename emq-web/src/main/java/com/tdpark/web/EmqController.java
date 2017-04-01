@@ -205,7 +205,7 @@ public class EmqController {
             fristName = mapping.value()[0];
         }
         String requestUrl = request.getRequestURL().toString();
-        int hidx = requestUrl.indexOf("/help",requestUrl.indexOf(fristName));
+        int hidx = requestUrl.indexOf("help",requestUrl.indexOf(fristName));
         String baseUrl = requestUrl.substring(0,hidx);
         
         ConfigResult result = new ConfigResult();
