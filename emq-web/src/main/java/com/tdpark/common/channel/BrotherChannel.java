@@ -24,16 +24,27 @@ public class BrotherChannel {
     private static final String SINGLE_PAUSE_URI = "/emq/pause";
     private static final String SINGLE_RESUME_URI = "/emq/resume";
     private static final String THREAD_NOTIFY_URI = "/emq/notify";
+    private static final String WHITE_INIT_URI = "/emq/white/init";
     public static final String THREAD_KEY = "thread_no";
     public static final String EXECUTE_TIME_KEY = "new_execute_time";
     private static final Logger LOGGER = LoggerFactory
             .getLogger(BrotherChannel.class);
+    /**
+     * 所有节点暂停消费
+     */
     public void fullPause() {
         fullPauseOrResume(true);
     }
+    /**
+     * 所有节点开始消费
+     */
     public void fullResume() {
         fullPauseOrResume(false);
     }
+    /**
+     * 暂停或恢复消费消息
+     * @param pause
+     */
     private void fullPauseOrResume(boolean pause){
         int nodeIdx = config.getNodeIdx();
         StatusCache.slefPauseOrResume(pause);
@@ -54,12 +65,16 @@ public class BrotherChannel {
             }
         }
     }
-
+    /**
+     * 通过线程编号通知对应节点有新消息产生
+     * @param threadNo
+     * @param newExecuteTime
+     */
     public void notifyThread(int threadNo,long newExecuteTime){
         int idx = (threadNo / config.getThreadNum()) + 1;//根据线程编号计算节点编号
         int nodeIdx = config.getNodeIdx();
         if(idx == nodeIdx){
-            LockContainer.notify(threadNo, newExecuteTime);
+            LockContainer.tryNotify(threadNo, newExecuteTime);
             return;
         }
         Map<Integer, String> nodes = config.getNodes();
@@ -81,7 +96,14 @@ public class BrotherChannel {
             LOGGER.error("===>",e1);
         }
     }
-    
+    /**
+     * 其他节点申请加入集群
+     * @param nodeIdx
+     * @param nodeHost
+     * @param nodeTotal
+     * @param threadNum
+     * @return
+     */
     public Result applyJoin(int nodeIdx,String nodeHost,int nodeTotal,int threadNum){
         Result result = new Result();
         Map<Integer, String> nodes = config.getNodes();
@@ -108,10 +130,36 @@ public class BrotherChannel {
         StatusCache.connectionStatus(nodeIdx, true);
         return result;
     }
-    
+    /**
+     * 其他节点申请暂时退出集群
+     * @param nodeIdx
+     * @return
+     */
     public Result applyQuit(int nodeIdx){
         Result result = new Result();
         StatusCache.connectionStatus(nodeIdx, false);
         return result;
+    }
+    /**
+     * 初始化白名单
+     */
+    public void initWhite(){
+        int nodeIdx = config.getNodeIdx();
+        Map<Integer, String> nodes = config.getNodes();
+        for (Entry<Integer, String> e : nodes.entrySet()) {
+            Integer idx = e.getKey();
+            if (nodeIdx == idx) {
+                continue;
+            }
+            if (!StatusCache.connectionStatus(idx)) {
+                continue;
+            }
+            String url = e.getValue() + WHITE_INIT_URI;
+            try {
+                HttpUtils.doPost(url, null);
+            } catch (IOException e1) {
+                LOGGER.error("===>",e1);
+            }
+        }
     }
 }

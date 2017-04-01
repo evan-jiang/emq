@@ -33,7 +33,7 @@ public class EntityDAL {
         return shardedJedis.incr(MQ_SEQUENCE_KEY);
     }
     /**
-     * 消息首次被保存，伴随着通知节点唤醒线程
+     * 消息首次被保存
      * @param entity
      */
     public void _push(Entity entity){

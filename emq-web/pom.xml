@@ -175,6 +175,7 @@
             <resource>
                 <directory>src/main/resources</directory>
                 <includes>
+                    <include>conf/*.xml</include>
                     <include>spring/*.xml</include>
                     <include>mappers/*.xml</include>
                     <include>*.xml</include>

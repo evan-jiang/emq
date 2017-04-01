@@ -28,7 +28,7 @@
     <!-- <import resource="classpath:spring/spring-dao.xml" /> -->
     <import resource="classpath:spring/spring-mvc.xml" />
     <import resource="classpath:spring/spring-init.xml" />
-    <import resource="classpath:spring/emq-config.xml" />
+    <import resource="classpath:conf/emq-config.xml" />
     <import resource="classpath:spring/spring-hessian.xml" />
 
 

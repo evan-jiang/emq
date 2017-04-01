@@ -40,7 +40,7 @@ public class EmqInit implements InitializingBean {
     public void afterPropertiesSet() throws Exception {
         try {
             checkConfig();
-            loadWhite();
+            initWhite();
             applyJoin();
             applyQuit();
         } catch (RuntimeException e) {
@@ -51,7 +51,9 @@ public class EmqInit implements InitializingBean {
             new Thread(new Executor(idx + ((config.getNodeIdx() - 1) * config.getThreadNum()), entityDAL)).start();
         }
     }
-
+    /**
+     * 检验配置
+     */
     private void checkConfig() {
         int nodeIdx = config.getNodeIdx();
         if (nodeIdx < 1) {
@@ -67,12 +69,20 @@ public class EmqInit implements InitializingBean {
             throw new RuntimeException("Thread num[" + threadNum
                     + "] illegality!");
         }
+        if (threadNum % Config.THREAD_BASE_NUM != 0){
+            throw new RuntimeException("Thread num[" + threadNum
+                    + "] must be in multiples of 8!");
+        }
     }
-
-    private void loadWhite() {
-        whiteCache.reload();
+    /**
+     * 初始化host白名单
+     */
+    private void initWhite() {
+        whiteCache.init();
     }
-
+    /**
+     * 申请加入集群
+     */
     private void applyJoin() {
         int nodeIdx = config.getNodeIdx();
         StatusCache.connectionStatus(nodeIdx, true);
@@ -102,7 +112,9 @@ public class EmqInit implements InitializingBean {
             }
         }
     }
-    
+    /**
+     * 注册申请退出集群的事件
+     */
     private void applyQuit(){
         //该节点shutdown时通知其他节点“我已经停止运行，你们要是接到需要我执行的消息时只需要持久化消息，就不要再提醒我了”
         Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {

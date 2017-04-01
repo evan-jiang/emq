@@ -1,10 +1,12 @@
 package com.tdpark.web;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.tdpark.common.annotaction.Description;
 import com.tdpark.common.cache.StatusCache;
 import com.tdpark.common.cache.WhiteCache;
 import com.tdpark.common.channel.BrotherChannel;
@@ -40,27 +43,16 @@ public class EmqController {
     private static final Logger LOGGER = LoggerFactory
             .getLogger(EmqController.class);
 
-    /**
-     * 创建消息
-     * 
-     * @param emqParams
-     * @param request
-     * @return
-     */
     @RequestMapping("make")
     @ResponseBody
+    @Description("创建消息")
     public Object make(EmqParams emqParams, HttpServletRequest request) {
         return emqService.make(emqParams);
     }
 
-    /**
-     * 所有节点停止消费消息
-     * 
-     * @param request
-     * @return
-     */
     @RequestMapping("full_pause")
     @ResponseBody
+    @Description("所有节点停止消费消息")
     public Object fullPause(HttpServletRequest request) {
         LOGGER.info(">>>>>>>>>>>>full node pause<<<<<<<<<<<<");
         brotherChannel.fullPause();
@@ -81,14 +73,9 @@ public class EmqController {
         return new Result();
     }
 
-    /**
-     * full_pause的逆操作，所有节点开始消费消息
-     * 
-     * @param request
-     * @return
-     */
     @RequestMapping("full_resume")
     @ResponseBody
+    @Description("full_pause的逆操作，所有节点开始消费消息")
     public Object fullResume(HttpServletRequest request) {
         LOGGER.info(">>>>>>>>>>>>full node resume<<<<<<<<<<<<");
         brotherChannel.fullResume();
@@ -143,6 +130,7 @@ public class EmqController {
     }
     @RequestMapping("config")
     @ResponseBody
+    @Description("获取集群配置信息")
     public Object config(HttpServletRequest request){
         Map<Integer, String> nodes = config.getNodes();
         ConfigResult result = new ConfigResult();
@@ -168,6 +156,87 @@ public class EmqController {
 
         public void setData(List<Object> data) {
             this.data = data;
+        }
+    }
+    @RequestMapping("white/list")
+    @ResponseBody
+    @Description("获取白名单列表")
+    public Object whiteList(HttpServletRequest request){
+        WhiteResult result = new WhiteResult();
+        result.setData(whiteCache.whiteList());
+        return result;
+    }
+    @SuppressWarnings("serial")
+    public static class WhiteResult extends Result{
+        public Set<String> data;
+        public Set<String> getData() {
+            return data;
+        }
+        public void setData(Set<String> data) {
+            this.data = data;
+        }
+    }
+    @RequestMapping("white/init")
+    @ResponseBody
+    public Object initWhite(HttpServletRequest request){
+        whiteCache.init();
+        return new Result();
+    }
+    @RequestMapping("white/add")
+    @ResponseBody
+    @Description("添加白名单")
+    public Object addWhite(@RequestParam(value="host",defaultValue="")String host,HttpServletRequest request){
+        return whiteCache.addHost(host);
+    }
+    @RequestMapping("white/remove")
+    @ResponseBody
+    @Description("移除白名单")
+    public Object removeWhite(@RequestParam(value="host",defaultValue="")String host,HttpServletRequest request){
+        return whiteCache.removeHost(host);
+    }
+    @RequestMapping("help")
+    @ResponseBody
+    @Description("帮助")
+    public Object help(HttpServletRequest request){
+        ConfigResult result = new ConfigResult();
+        List<Object> data = new ArrayList<Object>();
+        Class<?> clazz = EmqController.class;
+        String baseUri = "";
+        RequestMapping mapping = clazz.getAnnotation(RequestMapping.class);
+        if(mapping != null){
+            baseUri = mapping.value()[0];
+        }
+        Method[] methods = clazz.getDeclaredMethods();
+        for(Method m : methods){
+            Description description = m.getAnnotation(Description.class);
+            RequestMapping requestMapping = m.getAnnotation(RequestMapping.class);
+            if(description == null || requestMapping == null){
+                continue;
+            }
+            Map<String, Object> map = new HashMap<String, Object>();
+            String url = config.getNodes().get(config.getNodeIdx()) + baseUri + "/" + requestMapping.value()[0];
+            map.put("url", url);
+            map.put("description", description.value());
+            data.add(map);
+        }
+        result.setData(data);
+        return result;
+    }
+    public static void main(String[] args) {
+        Class<?> clazz = EmqController.class;
+        String baseUri = "";
+        RequestMapping mapping = clazz.getAnnotation(RequestMapping.class);
+        if(mapping != null){
+            baseUri = mapping.value()[0];
+        }
+        Method[] methods = clazz.getDeclaredMethods();
+        for(Method m : methods){
+            Description description = m.getAnnotation(Description.class);
+            RequestMapping requestMapping = m.getAnnotation(RequestMapping.class);
+            if(description == null || requestMapping == null){
+                continue;
+            }
+            System.out.println(baseUri + "/" + requestMapping.value()[0] + " : " + description.value());
         }
     }
 }
